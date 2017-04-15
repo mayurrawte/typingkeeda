@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typing Keeda</title>
+	<meta lang="utf-8">
+	 {% load static %}
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <meta name="google-site-verification" content="ngtdogZqYENEGPY3u7Lb4KVp81BgTzBJ_-5qEGxAU80" />
+	 <meta name="description" content="Typing keeda is a one minute typing game to test your typing speed and also compete with your social friends.">
+	 <meta name="keywords" content="typing,keeda,typingkeeda,mayur rawte,typing test,online typing,mayur,python django">
+	 <meta name="author" content="Mayur Rawte">
+
+  	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  	 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  	 <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+	 <link rel="stylesheet" href="{% static 'css/keeda_generic.css' %}" type="text/css" media="screen">
+	 <link href='https://fonts.googleapis.com/css?family=Dancing+Script|Montez|Merienda+One' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="{% static 'favicon.ico'%}" type="images/x-icon">
+
+</head>
+
+<body class="">
+
+
+<header class="">
+	
+	<div class="brand">
+		<img src="{% static 'images/keedalogo.png' %}">
+	</div>
+
+
+	<div class="nav-bar">
+		<div class="nav">Home</div>
+		<div class="nav">Feedback</div>
+		<div class="nav">Contact</div>
+		{% if email %}
+			<div class="nav user-profile-button">{{name|capfirst}}</div>
+			<div id="current-flag" style="display: none" value="true"></div>
+
+		{% endif %}
+
+
+	</div>
+
+
+
+	<div class="login-profile ">
+		<div class="login-profile-picture">
+		{% if user_detail.facebook_profile_picture %}
+			<img src= {{ user_detail.facebook_profile_picture }}>
+		{% else %}
+			<img src="{% static 'images/profile.png'%}">
+		{% endif %}
+		</div>
+
+		{% if user.is_authenticated %}
+			<div class="login-profile-name" id="username">
+				{{ user.first_name }}
+				<div class="on-click-user lpocu">
+					<div class="on-click-user-inside">
+						<div class="ocui-icon">
+							<img src="{% static 'images/account.png' %}">
+						</div>
+						<div>My Account</div>	
+					</div>
+					<div class="on-click-user-inside">
+						<div class="ocui-icon">
+							<img src="{% static 'images/logout.png' %}">	
+						</div>
+						<div>
+							<a href="/user_logout">
+								Logout
+							</a>
+						</div>
+					</div>	
+				</div>
+				
+			</div>
+		
+		
+		{% else %}
+			<div class="login-profile-name trigger-login-dialog">
+				Signin /Signup
+			</div>
+		{% endif %}
+	</div>
+	
+
+	<div class="nav-bar-optimised">
+		
+		<div class="nav-bar-menu-title">
+			MENU
+		</div>
+		<div class="hand-burger-menu">
+			<div class="nav-bar-top nav-bar-menu-opt"></div>
+			<div class="nav-bar-middle nav-bar-menu-opt"></div>
+			<div class="nav-bar-bottom nav-bar-menu-opt"></div>
+		</div>
+	</div>
+
+</header>
+
+
+<div class="nav-bar-menu">
+	<div class="nav-menu-obj nav-menu-obj-top" id="test">Home</div>
+	<div class="nav-menu-obj">Feedback</div>
+	<div class="nav-menu-obj">About Us</div>
+</div>
+
+
+<!-- Billi -->
+<div class="spinner-container">
+	<div class="cat">
+		<img src="{% static 'images/loadanim.gif'%}">
+	</div>
+	<div class="spinner">	
+	  <div class="rect1"></div>
+	  <div class="rect2"></div>
+	  <div class="rect3"></div>
+	  <div class="rect4"></div>
+	  <div class="rect5"></div>
+	</div>
+</div>
+
+
+
+
+<div class="sections" id="start-section" data-type="background" data-speed="5">
+	
+	<div class="start-section-txt-div">
+		<!--<h2>Do you <br />think <br />You have Good typing Speed.</h2>
+		
+		<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+		<div id="status"></div>
+		-->
+		<div class="left-keeda-title">
+			<img src="{% static 'images/center-text.png'%}">
+			<div id="status"></div>
+		</div>
+		
+	</div>
+
+	<!--<div class="start-section-button-div">
+		<div class="start-button">Start Typing</div>
+	</div>
+
+	-->
+</div>
+
+<div class="sections" id="main-section" data-type="background" data-speed="8">
+	<div class="desktop-container">
+		<p id="hidden_sentence" style='display: none;'>{{ sentence }}</p>
+		<p id="sentence"></p>
+	</div>
+	<div class="typing-container">
+		<form autocomplete="off">
+			<textarea type="text" name="typing_words" placeholder="Start Typing Here" id="typing_area" ></textarea>
+		</form>
+		<div>
+			<button id="restart"><img src="{% static 'images/restart.png'%}">Restart</button>
+		</div>
+	</div>
+	<div class="result-container">
+		<div class="result-sub"><span id="kpm">0</span> Words/ Minute<br /></div>
+		<span id="time" style="font-weight:bold;color:#fff;"></span>
+		<div class="result-sub">Accuracy &nbsp<span id="accuracy">0</span> % </div>
+		<div class="result-sub"> Time Remaining <span id="time_left">60</span>Seconds</div>
+	</div>
+</div>
+
+
+<div class="section-heading score-board-parallax" data-type="background" data-speed="15">
+		<div class="score-text-img">
+			<img src="{% static 'images/score-title.png'%}">
+		</div>
+	</div>
+<div class="sections score-section">
+	
+		<div class="scoreboard-level1">
+			
+
+			
+			<div class="scoreboard-content">
+				<p>randomHeading</p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</div>			
+			<div class="leaderboard">
+				<p>World Wide Ranking</p>
+				<div class="lb-overall" style="display: none;">
+					<table>
+						<thead>
+							<tr>
+								<th>User</th><th>Rank</th><th>User&nbsp&nbsp&nbspName</th><th>WPM</th><th>Social Profile</th>
+							</tr>					
+						</thead>
+						<tbody>
+							
+
+							
+							{% for user in world_wide_list %}
+								
+								<tr class= {% cycle 'odd' 'even' %} ><td class="table-thumbnail"><img src="{% static 'images/user.png' %}"></td><td>{{forloop.counter}}</td><td>{{user.name}}</td><td>{{user.highest_wpm}}</td><td>Click Here</td></tr>
+								
+							{% endfor %}
+							
+							
+							
+						</tbody>
+					</table>
+				</div>
+
+				<div class="leader-table">
+					<div class="leader-table-header">
+						<div class="leader-table-row ">
+							<div class="leader-tablecell">User</div>
+							<div class="leader-tablecell">Rank</div>
+							<div class="leader-tablecell">Name</div>
+							<div class="leader-tablecell">WPM</div>
+							<div class="leader-tablecell">Profile</div>
+						</div>
+					</div>
+					<div class="leader-table-body">
+					{% for user in world_wide_list %}
+						<div class= {% cycle 'leader-table-row-odd' 'leader-table-row-even' %}>
+							<div class="leader-tablecell"><div class="table-user-thumb"><img src="{{ user.facebook_profile_picture }}"></div></div>
+							<div class="leader-tablecell">{{forloop.counter}}</div>
+							<div class="leader-tablecell">{{user.name}}</div>
+							<div class="leader-tablecell">{{user.highest_wpm}}</div>
+							<div class="leader-tablecell">Profile</div>
+						</div>
+
+					{% endfor %}
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		
+		
+	
+</div>
+
+{% if user.is_authenticated %}
+<div class="sections">
+	
+	<div class="user-profile-section-header" data-type="background" data-speed="10">
+		
+				<div class="user-profile">
+				<div class="user-profile-picture" >
+					{% if user_detail.facebook_profile_picture %}
+						<img src= {{ user_detail.facebook_profile_picture }} id="fbpp">
+					{% endif %}
+						
+				</div>
+				<div class="user-profile-data">
+					<div><span>{{ user.first_name }}</span>
+					
+					</div>
+
+					
+				</div>
+			</div>
+	</div>
+
+	<div class="scoreboard-level2" data-type="background" data-speed="10">
+	
+			<div class="Friends-score leaderboard after-login-scoreboard">
+				<p class="fsb-head">Within Your Friends Circle</p>
+				<div class="lb-withinfriends">
+					
+
+							<div class="leader-table" style="width: 80%;">
+					<div class="leader-table-header">
+						<div class="leader-table-row ">
+							<div class="leader-tablecell">User</div>
+							<div class="leader-tablecell">Rank</div>
+							<div class="leader-tablecell">Name</div>
+							<div class="leader-tablecell">WPM</div>
+							<div class="leader-tablecell">Profile</div>
+						</div>
+					</div>
+					<div class="leader-table-body">
+					{% for users in friends %}
+						<div class= {% cycle 'leader-table-row-odd' 'leader-table-row-even' %}>
+							<div class="leader-tablecell"><div class="table-user-thumb"><img src="{{ users.facebook_profile_picture }}"></div></div>
+							<div class="leader-tablecell">{{forloop.counter}}</div>
+							<div class="leader-tablecell">{{users.name}}</div>
+							<div class="leader-tablecell">{{users.highest_wpm}}</div>
+							<div class="leader-tablecell">Profile</div>
+						</div>
+
+					{% endfor %}
+
+					</div>
+				</div>
+
+				</div>
+			</div>
+			
+			<div class="statistics after-login-scoreboard">
+				<div class="own-score">
+					<h5>Your Score</h5>	
+				</div>
+				<div class="score-detail">
+					<div><img src="{% static 'images/wpm.png'%}"><p>WPM </p><span id="highest_user_wpm">0</span></div>
+					<div><img src="{% static 'images/count.png'%}"><p>Tests</p><span id="no_of_test">0</span></div>
+				</div>
+				<h5>
+					WPM Statistics
+				</h5>
+				<canvas height="400" width="400" id="stats-canvas"></canvas>
+			</div>
+		</div>
+</div>
+{% endif %}
+
+
+
+
+
+
+<footer>
+	<div class="info-me">
+		<p>Developed & Designed by Mayur Rawte</p>
+	</div>
+</footer>
+
+
+<!--
+<div class="modal" id="newModal">
+	<div>
+		<a href="#close" class="close">X</a>
+		<div class="login-modal">
+			<p>Login</p>
+			<form action="/login/" class="login-contents" method="POST">{% csrf_token %}
+				<input type="email" name="email" placeholder="Email">
+				<input type="password" name="password" placeholder="Password">
+				<input type="submit" value="Signin" name="signin">
+				<div >Don't have account<br /> <span class="change-sub-modal">Click Here</span> </div>
+			</form>
+		</div>
+
+		<div class="register-modal sub-modal-hidden">
+			<p>Login</p>
+			<form action="/register/" class="login-contents" method="POST">{% csrf_token %}
+				
+				<input type="text" name="name" placeholder="Full Name">
+				<input type="email" name="email" placeholder="Email">
+				<input type="password" name="password" placeholder="Password">
+				<input type="submit" value="Sign Up" name="signin">
+			</form>
+			<div >Already have account <br /> <span class="change-sub-modal">Click Here</span> </div>
+		</div>
+
+		<div class="social-modal">
+			<!--<div class="social-button" id="fb-login-button"><img src="{% static 'images/fb_login.png' %}"></div>
+			<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+		</div>
+	</div>
+</div>
+
+-->
+
+<div class="js-dialog">
+	<div class="js-dialog-box">
+		<div class="js-dialog-header">
+			<div class="js-dialog-cancel" id="dialog-cancel">
+				X
+			</div>
+		</div>
+		<div class="js-dialog-content">
+			<form action="/user/" method="POST">{% csrf_token %}
+				<div class="input-box-wrapper">
+					<img src="{% static 'images/loginuser.png'%}">
+					<input type="email" name="email" placeholder="Email">
+				</div>
+				<div class="input-box-wrapper">
+					<img src="{% static 'images/loginpassword.png'%}">
+					<input type="password" name="password" placeholder="Password">
+				</div>
+				<div class="input-box-wrapper">
+					<input type="submit" value="Login" >
+				</div>
+				<div class="inbetween-or">
+					OR
+				</div>
+				<div class="sign-in-with-facebook" id="trigger-fb-login">
+					<div class="fb-ico">
+						<img src="{% static 'images/fb-ico.png'%}">
+					</div>
+					<div class="fb-text">
+						Sign in With Facebook
+					</div>
+				</div>
+			</form>
+			<div class="change-view-dialog">
+				Already have account. <br />
+				<div class="change-view-button">Click here to login</div> 
+			</div>
+		</div>
+
+		<div class="js-dialog-content js-dialog-change-view">
+			<form action="/register/"  method="POST">{% csrf_token %}
+				<div class="input-box-wrapper">
+					<img src="{% static 'images/loginuser.png'%}">
+					<input type="text" name="name" placeholder="Full Name">
+				</div>
+				<div class="input-box-wrapper">
+					<img src="{% static 'images/loginuser.png'%}">
+					<input type="email" name="email" placeholder="Email">
+				</div>
+				<div class="input-box-wrapper">
+					<img src="{% static 'images/loginpassword.png'%}">
+					<input type="password" name="password" placeholder="Password">
+				</div>
+
+				<div class="input-box-wrapper">
+					<input type="submit" value="Register">
+				</div>
+			</form>	
+			<div class="change-view-dialog">
+				Don't have account. <br />
+				<div class="change-view-button">Click here to register</div> 
+			</div>
+		</div>
+
+		<div class="js-dialog-footer">
+			
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
+<!--<script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/fb-login.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/new_fbapi.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/new_logic.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/front-ui.js' %}"></script>
+
+</body>
+</html>

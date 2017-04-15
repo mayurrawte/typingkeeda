@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	{% load static %}
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta name="description" content="Typing keeda is a one minute typing game to test your typing speed and also compete with your social friends.">
+	 <meta name="keywords" content="typing,keeda,typingkeeda,mayur rawte,typing test,online typing,mayur,python django">
+	 <meta name="author" content="Mayur Rawte">
+
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  	 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/generic.css' %}">
+
+	 	 <script type="text/javascript" src="{% static 'js/raphael-2.1.4.min.js' %}"></script>
+	 <script type="text/javascript" src="{% static 'js/justgage.js' %}"></script>	 
+
+	 <script type="text/javascript" src="{% static 'js/generic.js' %}"></script>
+</head>
+<body>
+
+<div>
+	<div class="notification-container">
+		<div id="notification-dialog">
+				<div class="col-md-12 custom-overlay" id="custom-overlay-id">
+				 <div style="width: 30%; margin: 145px auto 0px; position: absolute; left: 0px; right: 0px;"> 
+				 	<img src="{% static 'images/logo.png' %}" style="width:100%;">
+				 </div>
+				 <div style="z-index: 99; text-align: center; margin: 230px auto;  border: 1px solid #6f6f6f; color: #fff; padding: 60px 20px; font-size: 18px; cursor: pointer; text-transform: uppercase; position: absolute; left: 0px; right: 0px;">Do you really think someone can be faster then you on mobile.
+				 <div style="text-shadow: 0px 0px 11px #19c0ed;font-size: 8px;line-height: 30px;">We only test on desktops</div>
+				 </div>
+				 </div>
+
+			
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

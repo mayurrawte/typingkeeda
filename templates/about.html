@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" id="header">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"></button>   
+      <a class="navbar-brand c_brand" href="index.php"><div class="c_brand_thumb"><img class="img-responsive" src="{% static 'images/logo.png' %}" width="80" height="30"></div><div class="c_brand_name"><span></span></div></a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li id="feedback-btn"><a href="#">Feedback</a></li>
+		<li><a href="#">About</a></li>
+        <!--{% if user.is_authenticated %}-->
+        	<li id="side-menu-btn"><a href="#">{{user.first_name}}</a></li>
+			<div id="current-flag" style="display: none" value="true"></div>
+		<!--{% else %} -->
+			<li><a href="#" data-toggle="modal" data-target="#loginModal" id="login_btn">Signin/Signup</a></li>
+			<div id="current-flag" style="display: none" value="false"></div>
+		<!--{% endif %}-->
+      </ul>
+    </div>    
+  </div>
+</nav>
+
+<div class="">
+	
+</div>
+
+</body>
+</html>

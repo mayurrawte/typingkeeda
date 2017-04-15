@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <title>Typing Keeda</title>
+	 <meta lang="utf-8">
+	 {% load static %}
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <meta name="google-site-verification" content="ngtdogZqYENEGPY3u7Lb4KVp81BgTzBJ_-5qEGxAU80" />
+	 <meta name="description" content="Typing keeda is a one minute typing game to test your typing speed and also compete with your social friends.">
+	 <meta name="keywords" content="typing,keeda,typingkeeda,mayur rawte,typing test,online typing,mayur,python django">
+	 <meta name="author" content="Mayur Rawte">
+	 <script type="text/javascript">
+	  if (screen.width <= 800) {
+	    window.location = "/mobile";
+	  }
+	 </script>
+  	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  	 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+	 <script type="text/javascript" src="{% static 'js/raphael-2.1.4.min.js' %}"></script>
+	 <script type="text/javascript" src="{% static 'js/new_logic.js' %}"></script>
+	 <script type="text/javascript" src="{% static 'js/justgage.js' %}"></script>	 
+	 <script type="text/javascript" src="{% static 'js/generic.js' %}"></script>
+
+</head>
+<body>
+
+<div class="container-fluid main-container">
+	<div class="col-md-2 col_left">
+		<div>
+			<div class="navbar nav_title">
+				<a href="/home" class="site_title"><i class="fa fa-paw"></i>
+				<img src="{% static 'images/logo.png' %}" style="width: 75px;"> </a>
+			</div>
+			
+			<div class="profile">
+              <div class="profile_pic">
+                <img src={{ user_detail.profile_picture }} class="img-circle profile_img" style="width: 100%;">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h4>{{user.first_name}}</h4>
+              </div>
+            </div>
+		</div>		
+	</div>
+	<div class="top_nav">
+		<div class="nav navbar navbar-fixed-top">
+			 <div class="container">
+
+
+			      <ul class="nav navbar-nav navbar-right" style="width:15%;color: #3a3131 !important;">
+			        {% if user.is_authenticated %}
+			        	<li id="title-uimg"><img src={{ user_detail.profile_picture }}></li>
+			        	<li id="side-menu-btn"><a href="#">{{user.first_name}}</a></li>
+						<div id="current-flag" style="display: none" value=1></div>
+					{% else %}
+					   	<li id="title-uimg"><img src="{% static 'images/profile.png' %}"></li>
+						<li><a href="#" data-toggle="modal" data-target="#loginModal" id="login_btn">Signin/Signup</a></li>
+						<div id="current-flag" style="display: none" value=0></div>
+					{% endif %}
+			      </ul>
+
+
+			  </div>
+		</div>
+	</div>
+
+	<div class="col-md-10 main-content">
+		<div class="col-md-8">
+			<div class="graphical_analysis col-md-12">
+				<div class="col-head">
+					<h3>Graphical Statistics</h3>
+				</div>
+				
+				<div id="chart_div"></div>
+			</div>
+				<div class="writers_area col-md-12">
+					<div class="col-head">
+						<h3>Share your thoughts</h3>
+					</div>
+					<form action="/sentence_submit/" name="sent_form" method="POST" onsubmit="return sentence_validation()">{% csrf_token %}
+						<div class="">
+							<input type="text" name="sentence_title" placeholder="Title" required>
+						</div>
+						<div>
+								<textarea placeholder="textarea" name="sentence_text" id="sentence_area" required></textarea>  	
+						</div>
+						<div class="">
+							<input type="submit" name="publish" value="Publish">				
+						</div>
+					</form>
+				</div>
+				<div class="published col-md-12">
+					<div class="col-head">
+						<h3>Previously written</h3>
+					</div>
+					
+						{% for sentence in user_sentences %}
+							<div class="prev_sen">
+								<div class="prev_sen_title">{{sentence.sentence_title}}</div>
+								<div class="prev_sen_text">{{sentence.sentence_text}}</div>
+							</div>
+						{% endfor %}
+					
+				</div>
+
+				<div class="col-md-12 check-sentences">
+					<div class="col-head">
+						<h3>Submission Checklist</h3>
+					</div>
+
+					{% for sentence in pending_sentences %}
+						<div class="prev_sen">
+								<div class="prev_sen_title">{{sentence.sentence_title}}</div>
+								<div class="prev_sen_text">{{sentence.sentence_text}}</div>
+								<div class="approval_sen"><a href="/sentence-approval/{{sentence.sentence_id}}">Approve</a><a href="/sentence-reject/{{sentence.sentence_id}}">Reject</a></div>
+							</div>
+					{% endfor %}
+				</div>
+			
+		</div>
+
+		<div class="friends_ col-md-4">
+				<div class="col-head">
+					<h3>Friends</h3>
+				</div>
+				<div>
+					{% for user in friends %}
+						<div class="dash-friends">
+							<div ><img src="{{ user.profile_picture }} "></div>
+							<p>{{user.name}} <br /> {{user.highest_wpm}} </p>
+						</div>
+
+					{% endfor %}
+				</div>
+				<div>
+					{% if user_detail.facebook_id = '0' %}
+						<div onclick="custom_login()">Connect Facebook</div>
+					{% endif %}
+				</div>
+
+			</div>
+
+	</div>
+</div>
+
+
+</body>
+</html>

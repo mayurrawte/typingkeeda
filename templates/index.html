@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <title>Typing Keeda</title>
+	 <meta lang="utf-8">
+	 {% load static %}
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <meta name="google-site-verification" content="ngtdogZqYENEGPY3u7Lb4KVp81BgTzBJ_-5qEGxAU80" />
+	 <meta name="description" content="Typing keeda is a one minute typing game to test your typing speed and also compete with your social friends.">
+	 <meta name="keywords" content="typing,keeda,typingkeeda,mayur rawte,typing test,online typing,mayur,python django,typing test, typing speed test, speedtest, typing game, typing speed, keyboard,english typing, typing practice, typing game">
+	 <meta name="author" content="Mayur Rawte">
+	<meta name="google-signin-client_id" content="455764897025-88gdd7qih6p2s1lbo1cikl4o0io2ld38.apps.googleusercontent.com">
+	<script type="text/javascript">
+	  <!--
+	  if (screen.width <= 800) {
+	    window.location = "/mobile";
+	  }
+	  //-->
+	</script>
+
+	 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+  	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  	 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ 	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/generic.css' %}">
+
+	 <script type="text/javascript" src="{% static 'js/remodal.js'%}"></script>
+
+	 <link rel="stylesheet" type="text/css" href="{% static 'css/remodal.css' %}">
+
+
+	 <script type="text/javascript" src="{% static 'js/raphael-2.1.4.min.js' %}"></script>
+	 <script type="text/javascript" src="{% static 'js/justgage.js' %}"></script>	 
+
+	 <script type="text/javascript" src="{% static 'js/generic.js' %}"></script>
+
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+	  (adsbygoogle = window.adsbygoogle || []).push({
+	    google_ad_client: "ca-pub-7241450270416747",
+	    enable_page_level_ads: true
+	  });
+	</script>
+
+</head>
+
+<body>
+
+<div class="notification-active" id="notificationbox" >
+	<div class="notification-container">
+		<div id="notification-dialog">
+				<div class="col-md-12 custom-overlay" id="custom-overlay-id">
+				 </div>
+
+				
+
+		</div>
+	</div>
+</div>
+
+<div id="main-container" class="s-overlay-blr">
+
+	
+	
+
+
+<nav class="navbar navbar-default navbar-fixed-top" id="header" style="background: #484850;">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"></button>   
+      <a class="navbar-brand c_brand" href="/home"><div class="c_brand_thumb"><img class="img-responsive" src="{% static 'images/logo.png' %}" width="80" height="30"></div><div class="c_brand_name"><span></span></div></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right" style="color: #3a3131 !important;">
+       
+      
+        <li id="feedback-btn"><a href="#">Feedback</a></li>
+		<li><a href="#">About</a></li>
+	
+        {% if user.is_authenticated %}
+        	<li id="title-uimg"><img src={{ user_detail.profile_picture }}></li>
+        	<li ><a href="/dashboard">{{user.first_name}}</a></li>
+			<div id="current-flag" style="display: none" value=1></div>
+		{% else %}
+		   	<li id="title-uimg"><img src="{% static 'images/profile.png' %}"></li>
+			<li><a href="#loginmodal">SignIn/SignUp</a><br></li>
+			<div id="current-flag" style="display: none" value=0></div>
+		{% endif %}
+		<li style="display: none;">	<a href="#resultmodal" id="resultModal">Promode</a></li>
+      </ul>
+      <div id="testbtn">testbtn</div>
+    </div>    
+  </div>
+</nav>
+
+
+<div class="col-md-4 side-menu">
+	<div class="sm-inner">
+		<div class="side-menu-user-thumb">
+			{% if user_detail.profile_picture %}
+				<img src= {{ user_detail.profile_picture }}>
+			{% else %}
+				<img src="{% static 'images/profile.png' %}">
+			{% endif %}
+		</div>
+		<div class="side-menu-detail">
+			<p>Name- {{user}}</p>
+			<p>Highest Wpm</p>
+			<p>somerandomthing here</p>
+			<p><a href="#" onclick="g_signOut()">Logout</a></p>
+		</div>
+	</div>
+</div>
+
+<!--
+<div class="container-fluid c_container first-index-sec" data-type="background" data-speed="8">
+	<div class="fis-text-thumb">
+		<img src="{% static 'images/center-text.png' %}">
+		<div id="status"></div>
+	</div>
+</div>
+-->
+<div class="container-fluid c_container second-index-sec" >
+
+	<div class="col-md-12">
+		<h3>Typing Playground
+			<div id="sound_"><img src="{% static 'images/sound_en.png' %}"></div>
+		</h3>
+
+		<div class="col-md-8">
+			
+			<div class="col-md-12 author">
+				<h4 class="col-md-8">{{sentence.sentence_title}}<span style="position: absolute;right: 5px;font-size: 10px;bottom: -8px;">Title</span></h4>
+				<div class="col-md-3"><img src={{ author_detail.profile_picture }}></div>
+				<h5 class="col-md-3">{{ author.first_name }} <span style="position: absolute;right: 5px;font-size: 10px;bottom: -8px;">Submitted By</span></h5>
+			</div>
+
+			<div class="col-md-12 sentence-box" style="font-family: 'Ubuntu' !important;">
+				<p id="hidden_sentence" style='display: none;'>{{ sentence.sentence_text }}</p>
+				<p id="{{csrf_token}}"></p>
+			</div>
+			
+			<div class="typing-container col-md-12" >
+				
+				<form autocomplete="off" class="col-md-11" style="padding:0px;">
+					<textarea type="text" name="typing_words" placeholder="Start Typing Here" id="{{csrf_token}}1t3Z"  ></textarea>
+				</form>
+				<div class="col-md-1" style="padding:0px;">
+					<button id="restart"><img src='{% static "images/restart.png" %}'><p>Restart</p></button>
+				</div>
+			</div>
+
+		</div>
+		<div class="result-container col-md-4">
+			<div class="col-md-12" style="padding: 0px;">
+				<div id ="hid-stas">
+					<div class="result-sub"><span id="kpm">0</span> Words/ Minute<br /></div>
+					<span id="time" style="font-weight:bold;color:#fff;"></span>
+					<div class="result-sub">Accuracy &nbsp<span id="accuracy">0</span> % </div>
+					<div class="result-sub"> Time Remaining <span id="time_left">60</span>Seconds</div>
+				</div>
+
+				<div class="col-md-4" id="speed-gauge"></div>
+				<div class="col-md-4" id="time-gauge"></div>
+				<div class="col-md-4" id="accuracy-gauge"></div>	
+				<div>
+					<audio src="{% static 'error.mp3' %}" id="toingId"></audio>
+				</div>					
+			</div>
+			<div class="col-md-12 curgraph" id="curgraph">
+				<h4>Problematic Words for you</h4>
+				<p id="p_words"></p>
+				<button>Practise</button>
+			</div>
+	
+
+
+		</div>
+
+	</div>
+
+
+</div>
+
+
+<div class="container-fluid c_container container-scoreboard">
+{% if user.is_authenticated %}
+	<!--
+	<div class="col-md-8">
+		<div class="col-md-6">
+				<h3>Your Score</h3>	
+				<div class="col-md-12 my-score">
+					<div class="col-md-6">
+						<div class="wpm-thumb">
+							<img src="{% static 'images/wpm.png'%}">			
+						</div>
+						<div class="wpm-text">
+							<p>WPM </p>		
+							<p id="highest_user_wpm">0</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="wpm-thumb">
+							<img src="{% static 'images/count.png'%}">
+						</div>
+						<div class="wpm-text">
+							<p>Tests</p>
+							<p id="no_of_test">0</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 wpm-stats">
+
+					 <div id="chart_div"></div>
+      
+					<h3>WPM Statistis</h3>
+					<canvas height="400" width="400" id="stats-canvas"></canvas>	
+				</div>			
+		</div>		
+
+		
+	</div>
+	-->
+
+
+
+{% endif %}
+
+<div class="col-md-8" style="padding: 5px 25px;
+    background: #ffffff;
+    min-height: 665px;
+    border-bottom: 2px solid #ffffff;
+    border: 1px solid #E6E9ED;">
+		<h2 style="margin: 0;
+    font-weight: 400;
+    width: 100%;
+    padding: 12px 15px 12px;
+    border-bottom: 2px solid #E6E9ED;">Top TypingKeede</h2>
+	 {% for user in world_wide_list %}
+				
+				<div class="col-md-2 scrbrdusr"> 
+				<div class="scrbrdusr-img">
+				<img src="{{ user.profile_picture }} "></div>
+					<h5>{{user.name}}</h4>
+					<h6>{{user.highest_wpm}}</h6>
+				</div>
+					
+			{% endfor %}
+
+</div>
+
+<div class="col-md-4 auth_lst_cnt">
+	<h2>Top Contributes</h2>
+		{% for author in author_list %}
+		<div class="auth_lst">
+			<div style="width: 70px; margin: 5px 0px;"><img src={{ author.profile_picture}} style="width: 100%;border-radius: 100%;"></div> 
+			<div style="padding: 20px;font-size: 16px;font-weight: 400;">{{author.name}}</div>
+			<div style="padding: 20px;font-size: 16px;font-weight: 400;">{{author.author_count}} Submissions</div>
+		</div>
+		{% endfor %}	
+</div>
+
+
+</div>
+
+<div class="container-fluid" style="padding: 0px;">
+	
+
+
+<div class="col-md-6" style="padding: 0px;">
+	<div class="back-think">
+		<img src="{% static 'images/think.gif' %}" style="width: 100%;height: 450px;">
+	</div>
+	<div class="think-txt">
+		Thinking What is typing Keeda
+	</div>
+</div>
+
+<div class="col-md-6" style="    height: 450px;background: white;">
+		
+<p style="    padding: 35px 80px;
+    font-size: 18px;
+    line-height: 35px;
+    text-align: center;">Typing Keeda is a 1 minute typing test as a game which helps you to test your typing speed. Typing keeda offers you an easy way to imporve your typing sepped by generating statistics of your previous performance. You can also figure out problematic words for you. Share results with your friends on facebook and compete with them.
+</p>
+</div>
+
+<!--
+<div class="how col-md-6">
+This is how this works
+</div>
+
+
+<div class="col-md-6" style="padding: 0px;">
+	<div>
+		<img src="{% static 'images/how.gif' %}" style="width: 100%; height: 450px;">
+	</div>
+
+	<div class="think-txt">
+		But how
+	</div>
+</div>
+
+
+</div>
+
+
+-->
+<div class="container-fluid c_container_footer">
+	<div  class="last_ col-md-6" >
+
+		<div>Contact</div><div><a href="/privacy-policy">Privacy-Policy</a></div><div><a href="/terms-and-conditions">Terms and conditions</a></div>
+	</div>
+	<div class="col-md-6">
+		Social Links
+	</div>
+
+	<div class="col-md-12">Designed & Developed by Mayur Rawte</div>
+</div>
+
+{% if is_login == 0 %}
+<!-- Modal 
+  <div class="modal fade login_input" id="loginModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+
+        
+        <div class="modal-body">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          	<p>Can you believe it's free !</p>
+
+          <div class="modal-fb-btn " id="trigger-fb-login">
+          		<div>Register/Login with Facebook</div>
+          </div>
+
+          <div>
+				<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+          </div>
+        </div>
+      </div>    
+    </div>
+  </div>
+
+-->
+
+<!-- Modals -->
+
+<div class="remodal" data-remodal-id="loginmodal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc" style="width: auto;">
+  
+  <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+  
+  <div>
+    <h2 id="modal1Title">Login to Typing Keeda</h2>
+    <p id="modal1Desc">
+    	
+    	<div style="display: none;">
+    		<form action="/normal_login/" method="POST" class="normalLogin_form" >{% csrf_token %}
+    			<div class="form-group">{{ normalLogin_form.email }}</div>
+    			<div class="form-group">{{ normalLogin_form.password }}</div>
+    			<div class="form-group"><input type="submit" value="Login"></div>
+    		</form>	
+    	</div>
+    	<div class="loginmodalSocial">
+    		<div class="login_social_btn">
+	          <div class="modal-fb-btn " id="trigger-fb-login">
+	          				<img src="{% static 'images/fb.png' %}" style="width: 40px">
+	          		
+	          		<div>Sign in</div>
+	          </div>    			
+    		</div>
+
+    		<div class="login_social_btn" style="padding: 10px 0px">
+                <div style="width: 175px; margin: 0px auto;">
+					<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" data-width="175" data-heigh="40"></div>
+          		</div>
+    		</div>
+    	</div>
+    </p>
+  </div>
+<!--
+  <br>
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+ -->
+</div>
+
+
+ {% endif %}
+
+<div class="remodal" data-remodal-id="resultmodal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc" >
+  <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+  <div id="newNotification">
+
+    <h2 id="modal1Title"></h2>
+
+  </div>
+
+</div>
+
+
+<div class="feedback-box col-md-3">
+	<h3>Feedback</h3>
+	<h4 id="close-feedback-btn">X</h4>
+	<form action="/feedback_mail/" method="POST">{%csrf_token%}
+		<div class="form-group">
+			{{ form.f_name }}		
+		</div>
+		<div class="form-group">
+			{{ form.f_email }}			
+		</div>
+		<div class="form-group">
+			{{ form.f_subject }}
+		</div>
+		<div class="form-group">
+			{{ form.f_message}}			
+		</div>
+		<div class="form-group">
+			<input type="submit" value="Send">			
+		</div>
+
+	</form>
+
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/new_logic.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/front-ui.js' %}"></script>
+ <script>
+
+
+var speedgauge = new JustGage({
+id: "speed-gauge",
+value: document.getElementById('kpm').innerHTML,
+min: 0,
+max: 100,
+width:140,
+height:100,
+title: "Words Per Minute",
+label: "wpm",
+startAnimationTime: 1000,
+startAnimationType: "bounce",
+refreshAnimationTime: 500,
+refreshAnimationType: "<>",
+levelColors: ["#ff0000","#f9c802","#afed5d" ]
+});
+
+var accuracygauge = new JustGage({
+id: "accuracy-gauge",
+value: document.getElementById('accuracy').innerHTML,
+min: 0,
+max: 100,
+width:140,
+height:100,
+title: "Accuracy",
+label: "Percentage",
+startAnimationTime: 1000,
+startAnimationType: "bounce",
+refreshAnimationTime: 500,
+refreshAnimationType: "linear",
+levelColors: ["#ff0000","#f9c802","#afed5d" ]
+});
+
+var timegauge = new JustGage({
+id: "time-gauge",
+value: document.getElementById('time_left').innerHTML,
+min: 0,
+max: 60,
+title: "Time Left",
+label: "Seconds",
+startAnimationTime: 1000,
+startAnimationType: "bounce",
+refreshAnimationTime: 500,
+refreshAnimationType: "linear",
+width: 150,
+height:150,
+levelColors: ["#ff0000","#f9c802","#afed5d" ]
+});
+
+ function gaugeRefresh()
+ {
+
+ 	speedgauge.refresh(document.getElementById('kpm').innerHTML);
+ 	accuracygauge.refresh(document.getElementById('accuracy').innerHTML);
+ 	timegauge.refresh(document.getElementById('time_left').innerHTML);
+ }
+
+	
+
+
+</script>
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+</head>
+<body>
+
+<h1>Enter the sentence</h1>
+<form  action="/sentence_submit/" method="POST">{% csrf_token %}
+	<input type="text" name="sentence_text">
+	<input type="submit" value="Submit" name="submit">
+</form>
+
+</body>
+</html>
